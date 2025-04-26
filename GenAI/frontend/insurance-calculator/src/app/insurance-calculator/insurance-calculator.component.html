@@ -1,0 +1,92 @@
+<!-- Remove the search button since we now have navigation in the app component -->
+<!-- Rest of the existing calculator form content -->
+
+<div class="calculator-container">
+  <h1>Insurance Premium Calculator</h1>
+  
+  <mat-card class="calculator-card">
+    <mat-card-content>
+      <form [formGroup]="calculatorForm" (ngSubmit)="calculatePremium()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Age</mat-label>
+            <input matInput type="number" formControlName="age" placeholder="Enter your age" required>
+            <mat-error *ngIf="calculatorForm.get('age')?.errors?.['required'] && calculatorForm.get('age')?.touched">
+              Age is required
+            </mat-error>
+            <mat-error *ngIf="calculatorForm.get('age')?.errors?.['min'] && calculatorForm.get('age')?.touched">
+              Age must be at least 18
+            </mat-error>
+            <mat-error *ngIf="calculatorForm.get('age')?.errors?.['max'] && calculatorForm.get('age')?.touched">
+              Age must be at most 99
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Coverage Amount</mat-label>
+            <mat-select formControlName="coverage" required>
+              <mat-option value="100000">$100,000</mat-option>
+              <mat-option value="250000">$250,000</mat-option>
+              <mat-option value="500000">$500,000</mat-option>
+              <mat-option value="1000000">$1,000,000</mat-option>
+            </mat-select>
+            <mat-error *ngIf="calculatorForm.get('coverage')?.errors?.['required'] && calculatorForm.get('coverage')?.touched">
+              Coverage amount is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Medical Conditions</mat-label>
+            <input matInput formControlName="medicalConditions" placeholder="Enter medical conditions (comma separated)">
+            <mat-hint>e.g., diabetes, hypertension, asthma</mat-hint>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row checkbox-row">
+          <mat-checkbox formControlName="smoker">I am a smoker</mat-checkbox>
+        </div>
+        
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit">Calculate Premium</button>
+          <button mat-button type="button" (click)="resetForm()">Reset</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Calculating premium...</p>
+  </div>
+  
+  <div *ngIf="premiumResult && !loading" class="result-container fade-in">
+    <mat-card class="result-card">
+      <mat-card-header>
+        <mat-card-title>Premium Calculation Result</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="premium-amount">
+          <span class="label">Monthly Premium:</span>
+          <span class="amount">${{premiumResult.premium}}</span>
+        </div>
+        
+        <div class="risk-assessment">
+          <h3>Risk Assessment</h3>
+          <p [innerHTML]="premiumResult.riskAssessment"></p>
+        </div>
+        
+        <div class="recommendation" *ngIf="premiumResult.recommendation">
+          <h3>Recommendation</h3>
+          <p [innerHTML]="premiumResult.recommendation"></p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" (click)="saveApplication()">Apply for Insurance</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div> 

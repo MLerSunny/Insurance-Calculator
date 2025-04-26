@@ -1,0 +1,113 @@
+<h2 mat-dialog-title>Quote Overview: {{data.quote.quoteNumber}}</h2>
+
+<mat-dialog-content class="quote-overview-content">
+  <!-- Quote Summary -->
+  <section class="summary-section" aria-labelledby="quote-summary-heading">
+    <h3 id="quote-summary-heading" class="visually-hidden">Quote Summary</h3>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="label">Premium:</div>
+        <div class="value" aria-label="Premium amount">{{data.quote.premium | currency}}</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Coverage Amount:</div>
+        <div class="value" aria-label="Coverage amount">{{data.quote.coverageAmount | currency}}</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Status:</div>
+        <div class="value" aria-label="Quote status">{{data.quote.status}}</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Created:</div>
+        <div class="value" aria-label="Creation date">{{data.quote.createdAt | date}}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Risk Factors -->
+  <section aria-labelledby="risk-factors-heading">
+    <h3 id="risk-factors-heading">Premium Risk Factors</h3>
+    <div *ngIf="riskFactors.length === 0" class="no-data">
+      No significant risk factors identified.
+    </div>
+    <mat-list *ngIf="riskFactors.length > 0" aria-label="List of premium risk factors">
+      <mat-list-item *ngFor="let factor of riskFactors; let i = index" class="risk-item">
+        <div mat-line class="risk-header">
+          <span class="factor-name">{{factor.factor}}</span>
+          <span class="impact-badge" 
+                [ngClass]="factor.impact.toLowerCase()"
+                [attr.aria-label]="factor.impact + ' impact level'">
+            {{factor.impact}} Impact
+          </span>
+        </div>
+        <div mat-line class="risk-description" [attr.id]="'risk-description-' + i">
+          {{factor.description}}
+        </div>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </section>
+
+  <!-- Underwriting Considerations -->
+  <section aria-labelledby="underwriting-considerations-heading">
+    <h3 id="underwriting-considerations-heading">Underwriting Considerations</h3>
+    <div *ngIf="underwritingConcerns.length === 0" class="no-data">
+      No significant underwriting concerns identified.
+    </div>
+    <mat-list *ngIf="underwritingConcerns.length > 0" aria-label="List of underwriting concerns">
+      <mat-list-item *ngFor="let concern of underwritingConcerns; let i = index" class="concern-item">
+        <div mat-line class="concern-header">
+          <span class="concern-name">{{concern.concern}}</span>
+          <span class="level-badge" 
+                [ngClass]="concern.level.toLowerCase().replace(' to ', '-')"
+                [attr.aria-label]="concern.level + ' concern level'">
+            {{concern.level}} Concern
+          </span>
+        </div>
+        <div mat-line class="concern-description" [attr.id]="'concern-description-' + i">
+          {{concern.description}}
+        </div>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </section>
+  
+  <!-- Premium Breakdown -->
+  <section class="premium-breakdown" aria-labelledby="premium-breakdown-heading">
+    <h3 id="premium-breakdown-heading">Premium Breakdown</h3>
+    <div class="premium-chart" role="table" aria-label="Premium breakdown chart">
+      <!-- Base Premium -->
+      <div class="chart-row" role="row">
+        <div class="chart-label" role="cell">Base Premium</div>
+        <div class="chart-bar base" 
+             [style.width.%]="50" 
+             role="cell" 
+             aria-label="Base premium visual representation"></div>
+        <div class="chart-value" role="cell">$500.00</div>
+      </div>
+      
+      <!-- Risk Factor Premiums -->
+      <div *ngFor="let factor of riskFactors" class="chart-row" role="row">
+        <div class="chart-label" role="cell">{{factor.factor}}</div>
+        <div class="chart-bar" 
+             [ngClass]="factor.impact.toLowerCase()"
+             [style.width.%]="calculateImpactWidth(factor.impact)"
+             role="cell"
+             [attr.aria-label]="factor.factor + ' premium impact visual representation'"></div>
+        <div class="chart-value" role="cell">
+          {{calculateImpactValue(factor.impact, data.quote.premium) | currency}}
+        </div>
+      </div>
+      
+      <!-- Total Premium -->
+      <div class="chart-row total" role="row">
+        <div class="chart-label" role="cell">Total Premium</div>
+        <div class="chart-value" role="cell">{{data.quote.premium | currency}}</div>
+      </div>
+    </div>
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial aria-label="Close dialog">Close</button>
+</mat-dialog-actions> 

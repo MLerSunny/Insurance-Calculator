@@ -1,0 +1,226 @@
+/* Dialog Layout */
+.quote-overview-content {
+  max-height: 80vh;
+  padding: 0 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Headings */
+h3 {
+  margin: 24px 0 16px;
+  color: #3f51b5;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Quote Summary */
+.summary-section {
+  background-color: #f5f8ff;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.summary-item {
+  flex: 1;
+  min-width: 150px;
+}
+
+.label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.value {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Risk and Concern Items */
+.risk-item, .concern-item {
+  height: auto !important;
+  margin-bottom: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.risk-item:hover, .concern-item:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.risk-header, .concern-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.risk-description, .concern-description {
+  color: #555;
+  font-size: 0.9rem;
+  padding-left: 0 !important;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.factor-name, .concern-name {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Impact and Level Badges */
+.impact-badge, .level-badge {
+  font-size: 0.85rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Color scheme for risk levels */
+.high {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.medium {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.low {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.medium-high {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.low-medium {
+  background-color: #f1f8e9;
+  color: #689f38;
+}
+
+/* Empty state */
+.no-data {
+  color: #757575;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Premium breakdown chart */
+.premium-breakdown {
+  margin-top: 32px;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.premium-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.chart-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+  transition: background-color 0.2s ease;
+}
+
+.chart-row:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.chart-label {
+  width: 150px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.chart-bar {
+  height: 20px;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  flex: 1;
+}
+
+.chart-bar.base {
+  background-color: #bbdefb;
+}
+
+.chart-bar.high {
+  background-color: #ef9a9a;
+}
+
+.chart-bar.medium {
+  background-color: #ffe082;
+}
+
+.chart-bar.low {
+  background-color: #c5e1a5;
+}
+
+.chart-value {
+  width: 80px;
+  text-align: right;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.chart-row.total {
+  font-weight: 500;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+  margin-top: 8px;
+  color: #3f51b5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .chart-label {
+    width: 100px;
+  }
+  
+  .chart-value {
+    width: 70px;
+  }
+  
+  .summary-item {
+    min-width: 120px;
+  }
+} 

@@ -1,0 +1,21 @@
+.search-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.search-button {
+  text-decoration: none;
+  
+  button {
+    font-size: 16px;
+    padding: 8px 16px;
+    
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Rest of existing styles 

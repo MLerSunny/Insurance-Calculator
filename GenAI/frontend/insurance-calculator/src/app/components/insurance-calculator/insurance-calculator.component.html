@@ -1,0 +1,373 @@
+<div class="calculator-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Insurance Premium Calculator</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="loading" class="loading-overlay">
+        <mat-spinner [diameter]="40" color="primary"></mat-spinner>
+      </div>
+
+      <div class="account-info-section" *ngIf="accountInfo">
+        <div class="account-card">
+          <div class="account-header">
+            <h3>Account Information</h3>
+            <div class="account-badge" *ngIf="isNewAccount">New Account</div>
+          </div>
+          <div class="account-details">
+            <div class="detail-item">
+              <span class="label">Name:</span>
+              <span class="value">{{accountInfo.firstName}} {{accountInfo.lastName}}</span>
+            </div>
+            <div class="detail-item" *ngIf="accountInfo.email">
+              <span class="label">Email:</span>
+              <span class="value">{{accountInfo.email}}</span>
+            </div>
+            <div class="detail-item" *ngIf="accountInfo.address">
+              <span class="label">Address:</span>
+              <span class="value">{{accountInfo.address}}</span>
+            </div>
+            <div class="detail-item" *ngIf="applicationId">
+              <span class="label">Application ID:</span>
+              <span class="value">{{applicationId}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="insuranceForm" (ngSubmit)="onSubmit()" class="calculator-form">
+        <!-- Basic Information -->
+        <div class="form-section">
+          <h3>Basic Information</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Age*</mat-label>
+            <input matInput type="number" formControlName="age" required>
+            <mat-error *ngIf="insuranceForm.get('age')?.errors?.['required']">Age is required</mat-error>
+            <mat-error *ngIf="insuranceForm.get('age')?.errors?.['min']">Age must be at least 18</mat-error>
+            <mat-error *ngIf="insuranceForm.get('age')?.errors?.['max']">Age must be at most 100</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Annual Income*</mat-label>
+            <span matPrefix>$ </span>
+            <input matInput type="number" formControlName="annualIncome" required>
+            <mat-error *ngIf="insuranceForm.get('annualIncome')?.errors?.['required']">Annual income is required</mat-error>
+            <mat-error *ngIf="insuranceForm.get('annualIncome')?.errors?.['min']">Annual income must be at least 0</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Insurance Score*</mat-label>
+            <input matInput type="number" formControlName="insuranceScore" required>
+            <mat-hint>Score from 300-850</mat-hint>
+            <mat-error *ngIf="insuranceForm.get('insuranceScore')?.errors?.['required']">Insurance score is required</mat-error>
+            <mat-error *ngIf="insuranceForm.get('insuranceScore')?.errors?.['min']">Score must be at least 300</mat-error>
+            <mat-error *ngIf="insuranceForm.get('insuranceScore')?.errors?.['max']">Score must be at most 850</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Lifestyle Information -->
+        <div class="form-section" formGroupName="lifestyle">
+          <h3>Lifestyle Information</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Exercise Frequency*</mat-label>
+            <mat-select formControlName="exerciseFrequency" required>
+              <mat-option value="sedentary">Sedentary</mat-option>
+              <mat-option value="moderate">Moderate</mat-option>
+              <mat-option value="active">Active</mat-option>
+              <mat-option value="very_active">Very Active</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('lifestyle.exerciseFrequency')?.errors?.['required']">Exercise frequency is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Smoking Status*</mat-label>
+            <mat-select formControlName="smokingStatus" required>
+              <mat-option value="never">Never</mat-option>
+              <mat-option value="former">Former Smoker</mat-option>
+              <mat-option value="current">Current Smoker</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('lifestyle.smokingStatus')?.errors?.['required']">Smoking status is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Alcohol Consumption*</mat-label>
+            <mat-select formControlName="alcoholConsumption" required>
+              <mat-option value="never">Never</mat-option>
+              <mat-option value="occasional">Occasional</mat-option>
+              <mat-option value="regular">Regular</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('lifestyle.alcoholConsumption')?.errors?.['required']">Alcohol consumption is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Diet Quality*</mat-label>
+            <mat-select formControlName="dietQuality" required>
+              <mat-option value="poor">Poor</mat-option>
+              <mat-option value="average">Average</mat-option>
+              <mat-option value="good">Good</mat-option>
+              <mat-option value="excellent">Excellent</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('lifestyle.dietQuality')?.errors?.['required']">Diet quality is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Occupation Information -->
+        <div class="form-section" formGroupName="occupation">
+          <h3>Occupation Information</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Job Title</mat-label>
+            <input matInput formControlName="jobTitle" placeholder="Enter your job title">
+            <mat-error *ngIf="insuranceForm.get('occupation.jobTitle')?.hasError('required')">Job title is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Risk Level</mat-label>
+            <mat-select formControlName="riskLevel">
+              <mat-option value="low">Low Risk</mat-option>
+              <mat-option value="medium">Medium Risk</mat-option>
+              <mat-option value="high">High Risk</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('occupation.riskLevel')?.hasError('required')">Risk level is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Work Environment</mat-label>
+            <mat-select formControlName="workEnvironment">
+              <mat-option value="office">Office</mat-option>
+              <mat-option value="field">Field</mat-option>
+              <mat-option value="hazardous">Hazardous</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('occupation.workEnvironment')?.hasError('required')">Work environment is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Mental Health Information -->
+        <div class="form-section" formGroupName="mentalHealth">
+          <h3>Mental Health Information</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Stress Level</mat-label>
+            <mat-select formControlName="stressLevel">
+              <mat-option value="low">Low</mat-option>
+              <mat-option value="moderate">Moderate</mat-option>
+              <mat-option value="high">High</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('mentalHealth.stressLevel')?.hasError('required')">Stress level is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Previous Conditions</mat-label>
+            <mat-select formControlName="previousConditions">
+              <mat-option value="none">None</mat-option>
+              <mat-option value="anxiety">Anxiety</mat-option>
+              <mat-option value="depression">Depression</mat-option>
+              <mat-option value="other">Other</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('mentalHealth.previousConditions')?.hasError('required')">Previous conditions are required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Current Treatment</mat-label>
+            <mat-select formControlName="currentTreatment">
+              <mat-option value="none">None</mat-option>
+              <mat-option value="therapy">Therapy</mat-option>
+              <mat-option value="medication">Medication</mat-option>
+              <mat-option value="both">Both</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('mentalHealth.currentTreatment')?.hasError('required')">Current treatment is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Medications Information -->
+        <div class="form-section" formGroupName="medications">
+          <h3>Medications Information</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Current Medications</mat-label>
+            <textarea matInput formControlName="currentMedications" placeholder="List your current medications"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Chronic Conditions</mat-label>
+            <textarea matInput formControlName="chronicConditions" placeholder="List any chronic conditions"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Allergies</mat-label>
+            <textarea matInput formControlName="allergies" placeholder="List any allergies"></textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- Family Information -->
+        <div class="form-section" formGroupName="family">
+          <h3>Family Information</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Number of Dependents</mat-label>
+            <input matInput formControlName="numberOfDependents" type="number" placeholder="Enter number of dependents">
+            <mat-error *ngIf="insuranceForm.get('family.numberOfDependents')?.hasError('required')">Number of dependents is required</mat-error>
+            <mat-error *ngIf="insuranceForm.get('family.numberOfDependents')?.hasError('min')">Number of dependents must be positive</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Family History</mat-label>
+            <textarea matInput formControlName="familyHistory" placeholder="Enter relevant family history"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Marital Status</mat-label>
+            <mat-select formControlName="maritalStatus">
+              <mat-option value="single">Single</mat-option>
+              <mat-option value="married">Married</mat-option>
+              <mat-option value="divorced">Divorced</mat-option>
+              <mat-option value="widowed">Widowed</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('family.maritalStatus')?.hasError('required')">Marital status is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Travel Information -->
+        <div class="form-section" formGroupName="travel">
+          <h3>Travel Information</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Travel Frequency</mat-label>
+            <mat-select formControlName="frequency">
+              <mat-option value="rarely">Rarely</mat-option>
+              <mat-option value="occasionally">Occasionally</mat-option>
+              <mat-option value="frequently">Frequently</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('travel.frequency')?.hasError('required')">Travel frequency is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Destinations</mat-label>
+            <textarea matInput formControlName="destinations" placeholder="List your common travel destinations"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Travel Purpose</mat-label>
+            <mat-select formControlName="purpose">
+              <mat-option value="leisure">Leisure</mat-option>
+              <mat-option value="business">Business</mat-option>
+              <mat-option value="both">Both</mat-option>
+            </mat-select>
+            <mat-error *ngIf="insuranceForm.get('travel.purpose')?.hasError('required')">Travel purpose is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-button">
+          <button mat-raised-button color="primary" type="submit" [disabled]="insuranceForm.invalid">
+            <mat-icon>calculate</mat-icon>
+            Calculate Premium
+          </button>
+          
+          <button mat-raised-button color="accent" type="button" (click)="saveApplication()" [disabled]="loading">
+            <mat-icon>save</mat-icon>
+            Save Application
+          </button>
+        </div>
+
+        <!-- Success Message -->
+        <div *ngIf="saveSuccess" class="success-message">
+          <mat-icon>check_circle</mat-icon>
+          <span>Application saved successfully!</span>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="error">
+          <mat-icon>error</mat-icon>
+          <span>{{ error }}</span>
+        </div>
+      </form>
+
+      <div *ngIf="result" class="result-container">
+        <h3>Premium Calculation Results</h3>
+        
+        <!-- Risk Factors and Conditions -->
+        <div class="lists-container">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Risk Factors</mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item *ngFor="let factor of getFactors()">
+                <mat-icon matListIcon>warning</mat-icon>
+                <div matLine>{{ factor.name }}: {{ factor.value | number:'1.2-2' }}</div>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </div>
+
+        <!-- Analysis -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Detailed Analysis</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p class="analysis-text" *ngIf="result">
+            Based on your profile, we've calculated a {{ result.riskLevel }} risk level with estimated premium of ${{ result.premium | number:'1.2-2' }}.
+          </p>
+        </mat-expansion-panel>
+
+        <!-- Premium and Risk Level -->
+        <div class="result-summary">
+          <div class="premium-display">
+            <div class="label">Estimated Premium</div>
+            <div class="value">${{ result.premium | number:'1.2-2' }}</div>
+          </div>
+          <div class="risk-display">
+            <div class="label">Risk Level</div>
+            <div class="value" [ngClass]="{
+              'risk-high': result.riskLevel === 'High',
+              'risk-medium': result.riskLevel === 'Medium',
+              'risk-low': result.riskLevel === 'Low'
+            }">{{ result.riskLevel }}</div>
+          </div>
+        </div>
+
+        <!-- Factor Analysis -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Risk Factor Analysis</mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <div class="factors-grid">
+            <div class="factor-item" *ngFor="let factor of getFactors()">
+              <div class="label">{{ factor.name }}</div>
+              <div class="value" [ngClass]="getFactorClass(factor.value)">
+                {{ factor.value | number:'1.2-2' }}
+                <div class="factor-bar" [style.width.%]="getFillPercentage(factor.value)"></div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+        <!-- Recommendations -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Coverage Recommendations</mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <div class="recommendations-list">
+            <mat-card *ngFor="let rec of result?.recommendations || []" [ngClass]="rec.importance + '-priority'" class="recommendation-card">
+              <mat-card-header>
+                <div mat-card-avatar class="rec-icon-container">
+                  <mat-icon>{{ getRecommendationIcon(rec.coverageType) }}</mat-icon>
+                </div>
+                <mat-card-title>{{ rec.coverageType }}</mat-card-title>
+                <mat-card-subtitle>{{ rec.importance }} Priority</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ rec.description }}</p>
+                <div class="chip-container">
+                  <mat-chip-set>
+                    <mat-chip [ngClass]="getImportanceColor(rec.importance)" highlighted>
+                      {{ rec.importance | uppercase }} Priority
+                    </mat-chip>
+                  </mat-chip-set>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-expansion-panel>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

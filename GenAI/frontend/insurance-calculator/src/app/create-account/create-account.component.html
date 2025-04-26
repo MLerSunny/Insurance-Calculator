@@ -1,0 +1,94 @@
+<div class="create-account-container">
+  <h1>Create New Account</h1>
+  
+  <div class="account-number">
+    <strong>Account Number:</strong> {{ accountNumber }}
+    <mat-icon class="info-icon" matTooltip="This account number is automatically generated">info</mat-icon>
+  </div>
+  
+  <form [formGroup]="accountForm" (ngSubmit)="submitForm()">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" placeholder="Enter first name" required>
+        <mat-error *ngIf="accountForm.get('firstName')?.errors?.['required'] && accountForm.get('firstName')?.touched">
+          First name is required
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" placeholder="Enter last name" required>
+        <mat-error *ngIf="accountForm.get('lastName')?.errors?.['required'] && accountForm.get('lastName')?.touched">
+          Last name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phoneNumber" placeholder="Enter phone number" required>
+        <mat-error *ngIf="accountForm.get('phoneNumber')?.errors?.['required'] && accountForm.get('phoneNumber')?.touched">
+          Phone number is required
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Enter email" type="email">
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Address Line 1</mat-label>
+        <input matInput formControlName="addressLine1" placeholder="Enter address line 1" required>
+        <mat-error *ngIf="accountForm.get('addressLine1')?.errors?.['required'] && accountForm.get('addressLine1')?.touched">
+          Address is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Address Line 2</mat-label>
+        <input matInput formControlName="addressLine2" placeholder="Enter address line 2 (optional)">
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" placeholder="Enter city" required>
+        <mat-error *ngIf="accountForm.get('city')?.errors?.['required'] && accountForm.get('city')?.touched">
+          City is required
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>State</mat-label>
+        <input matInput formControlName="state" placeholder="Enter state" required>
+        <mat-error *ngIf="accountForm.get('state')?.errors?.['required'] && accountForm.get('state')?.touched">
+          State is required
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Zip Code</mat-label>
+        <input matInput formControlName="zipCode" placeholder="Enter zip code" required>
+        <mat-error *ngIf="accountForm.get('zipCode')?.errors?.['required'] && accountForm.get('zipCode')?.touched">
+          Zip code is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+        <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+        <span *ngIf="!loading">Create Account</span>
+      </button>
+      <button mat-button type="button" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div> 

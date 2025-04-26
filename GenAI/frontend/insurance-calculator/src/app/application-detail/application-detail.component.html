@@ -1,0 +1,240 @@
+<div class="application-detail-container">
+  <div class="header">
+    <button mat-icon-button (click)="goBack()" matTooltip="Back to search">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Application Details</h1>
+  </div>
+  
+  <div *ngIf="loading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Loading application...</span>
+  </div>
+  
+  <ng-container *ngIf="!loading && application">
+    <div class="account-header">
+      <div class="account-number-section">
+        <div class="account-label">Account Number</div>
+        <div class="account-number">{{ application.accountNumber }}</div>
+      </div>
+      
+      <div class="account-status">
+        <mat-chip color="primary" selected>Active</mat-chip>
+      </div>
+    </div>
+    
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>Personal Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid" *ngIf="!editMode">
+          <div class="info-item">
+            <div class="info-label">First Name</div>
+            <div class="info-value">{{ application.firstName }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Last Name</div>
+            <div class="info-value">{{ application.lastName }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Email</div>
+            <div class="info-value">{{ application.email || 'Not provided' }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Phone Number</div>
+            <div class="info-value">{{ application.phoneNumber }}</div>
+          </div>
+        </div>
+        
+        <div class="form-grid" *ngIf="editMode">
+          <form [formGroup]="editForm" class="edit-form">
+            <div class="form-row">
+              <div class="form-group">
+                <div class="info-label">First Name</div>
+                <div class="info-value">{{ application.firstName }}</div>
+              </div>
+              
+              <div class="form-group">
+                <div class="info-label">Last Name</div>
+                <div class="info-value">{{ application.lastName }}</div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email">
+                <mat-error *ngIf="editForm.get('email')?.hasError('email')">
+                  Please enter a valid email address
+                </mat-error>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>Phone Number</mat-label>
+                <input matInput formControlName="phoneNumber">
+                <mat-hint>Format: 1234567890</mat-hint>
+                <mat-error *ngIf="editForm.get('phoneNumber')?.hasError('required')">
+                  Phone number is required
+                </mat-error>
+                <mat-error *ngIf="editForm.get('phoneNumber')?.hasError('pattern')">
+                  Please enter a valid 10-digit phone number
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>Address Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid" *ngIf="!editMode">
+          <div class="info-item full-width">
+            <div class="info-label">Address Line 1</div>
+            <div class="info-value">{{ application.addressLine1 }}</div>
+          </div>
+          
+          <div class="info-item full-width" *ngIf="application.addressLine2">
+            <div class="info-label">Address Line 2</div>
+            <div class="info-value">{{ application.addressLine2 }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">City</div>
+            <div class="info-value">{{ application.city }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">State</div>
+            <div class="info-value">{{ application.state }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Zip Code</div>
+            <div class="info-value">{{ application.zipCode }}</div>
+          </div>
+        </div>
+        
+        <div class="form-grid" *ngIf="editMode">
+          <form [formGroup]="editForm" class="edit-form">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Address Line 1</mat-label>
+                <input matInput formControlName="addressLine1">
+                <mat-error *ngIf="editForm.get('addressLine1')?.hasError('required')">
+                  Address is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Address Line 2</mat-label>
+                <input matInput formControlName="addressLine2">
+              </mat-form-field>
+            </div>
+            
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city">
+                <mat-error *ngIf="editForm.get('city')?.hasError('required')">
+                  City is required
+                </mat-error>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>State</mat-label>
+                <input matInput formControlName="state">
+                <mat-error *ngIf="editForm.get('state')?.hasError('required')">
+                  State is required
+                </mat-error>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>Zip Code</mat-label>
+                <input matInput formControlName="zipCode">
+                <mat-error *ngIf="editForm.get('zipCode')?.hasError('required')">
+                  Zip code is required
+                </mat-error>
+                <mat-error *ngIf="editForm.get('zipCode')?.hasError('pattern')">
+                  Please enter a valid zip code
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <!-- Quotes Section -->
+    <div class="section-container mat-elevation-z2" *ngIf="!loading">
+      <h2>Quotes</h2>
+      
+      <div *ngIf="application?.quotes?.length; else noQuotes">
+        <table mat-table [dataSource]="application.quotes || []" class="mat-elevation-z1 full-width">
+          <!-- Quote Number Column -->
+          <ng-container matColumnDef="quoteNumber">
+            <th mat-header-cell *matHeaderCellDef> Quote Number </th>
+            <td mat-cell *matCellDef="let quote"> {{quote.quoteNumber}} </td>
+          </ng-container>
+
+          <!-- Premium Column -->
+          <ng-container matColumnDef="premium">
+            <th mat-header-cell *matHeaderCellDef> Premium </th>
+            <td mat-cell *matCellDef="let quote"> {{quote.premium | currency}} </td>
+          </ng-container>
+
+          <!-- Coverage Amount Column -->
+          <ng-container matColumnDef="coverageAmount">
+            <th mat-header-cell *matHeaderCellDef> Coverage Amount </th>
+            <td mat-cell *matCellDef="let quote"> {{quote.coverageAmount | currency}} </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Status </th>
+            <td mat-cell *matCellDef="let quote"> {{quote.status}} </td>
+          </ng-container>
+
+          <!-- Created Date Column -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef> Date </th>
+            <td mat-cell *matCellDef="let quote"> {{quote.createdAt | date}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+              (click)="openQuoteOverview(row)" 
+              class="clickable-row"></tr>
+        </table>
+      </div>
+
+      <ng-template #noQuotes>
+        <p class="no-data-message">No quotes have been created for this application.</p>
+      </ng-template>
+    </div>
+    
+    <div class="actions">
+      <button *ngIf="!editMode" mat-raised-button color="primary" (click)="toggleEditMode()">Edit Details</button>
+      <ng-container *ngIf="editMode">
+        <button mat-raised-button color="warn" (click)="cancelEdit()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="editForm.invalid || saving" (click)="saveChanges()">
+          <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
+          <span *ngIf="!saving">Save Changes</span>
+        </button>
+      </ng-container>
+      <button *ngIf="!editMode" mat-raised-button color="accent" [routerLink]="['/quote']" [queryParams]="{applicationId: applicationId}">Create Quote</button>
+      <button *ngIf="!editMode && application && application.quotes && application.quotes.length > 0" 
+              mat-raised-button color="primary" 
+              (click)="openQuoteOverview(application.quotes[0])">Quote Overview</button>
+    </div>
+  </ng-container>
+</div> 

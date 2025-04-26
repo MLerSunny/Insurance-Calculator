@@ -1,0 +1,107 @@
+<div class="account-creation-container">
+  <mat-card class="account-card">
+    <mat-card-header>
+      <mat-card-title>Create New Account</mat-card-title>
+      <mat-card-subtitle>Please provide the following information to create your account</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div *ngIf="loading" class="loading-overlay">
+        <mat-spinner [diameter]="40" color="primary"></mat-spinner>
+      </div>
+      
+      <div *ngIf="success" class="success-message">
+        <h3>Account Created Successfully!</h3>
+        <p>Redirecting to calculator...</p>
+      </div>
+      
+      <form *ngIf="!success" [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name *</mat-label>
+            <input matInput formControlName="firstName" placeholder="Enter your first name">
+            <mat-error *ngIf="accountForm.get('firstName')?.errors?.['required']">
+              First name is required
+            </mat-error>
+            <mat-error *ngIf="accountForm.get('firstName')?.errors?.['minlength']">
+              First name must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name *</mat-label>
+            <input matInput formControlName="lastName" placeholder="Enter your last name">
+            <mat-error *ngIf="accountForm.get('lastName')?.errors?.['required']">
+              Last name is required
+            </mat-error>
+            <mat-error *ngIf="accountForm.get('lastName')?.errors?.['minlength']">
+              Last name must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Email *</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="Enter your email">
+            <mat-error *ngIf="accountForm.get('email')?.errors?.['required']">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="accountForm.get('email')?.errors?.['email']">
+              Please enter a valid email address
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phone" placeholder="Enter your phone number">
+            <mat-hint>10-digit number, no spaces or dashes</mat-hint>
+            <mat-error *ngIf="accountForm.get('phone')?.errors?.['pattern']">
+              Please enter a valid 10-digit phone number
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Address *</mat-label>
+            <input matInput formControlName="address" placeholder="Enter your address">
+            <mat-error *ngIf="accountForm.get('address')?.errors?.['required']">
+              Address is required
+            </mat-error>
+            <mat-error *ngIf="accountForm.get('address')?.errors?.['minlength']">
+              Address must be at least 5 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput formControlName="dateOfBirth" [matDatepicker]="picker" placeholder="MM/DD/YYYY" aria-label="Date of birth">
+            <mat-datepicker-toggle matSuffix [for]="picker" aria-label="Open date picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-hint>Optional</mat-hint>
+          </mat-form-field>
+        </div>
+        
+        <div *ngIf="error" class="error-message mat-error">
+          {{ error }}
+        </div>
+        
+        <div class="form-actions">
+          <button mat-button type="button" (click)="goBack()">
+            Back to Search
+          </button>
+          <button mat-raised-button color="primary" type="submit">
+            Create Account
+          </button>
+        </div>
+
+        <div class="required-fields-note">
+          * Required fields
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div> 

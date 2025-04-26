@@ -1,0 +1,108 @@
+.search-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 24px;
+  color: #3f51b5;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.results-container {
+  margin-top: 32px;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.no-results, .no-results-create {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 48px 0;
+  text-align: center;
+  color: #666;
+}
+
+.no-results-create button {
+  margin-top: 16px;
+}
+
+.no-results mat-icon, .no-results-create mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: #999;
+}
+
+.results-table {
+  margin-top: 24px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 80px;
+  text-align: center;
+}
+
+.status-chip {
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 12px;
+}
+
+.approved {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.pending {
+  background-color: #fff9c4;
+  color: #ff8f00;
+}
+
+.form-instructions {
+  margin: 8px 0 16px;
+  color: #666;
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+  }
+} 

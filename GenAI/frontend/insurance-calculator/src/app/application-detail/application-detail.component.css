@@ -1,0 +1,176 @@
+.application-detail-container {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0 0 0 16px;
+  color: #3f51b5;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 48px 0;
+  justify-content: center;
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.account-label {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.account-number {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.info-card {
+  margin-bottom: 24px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.form-grid {
+  margin-top: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.edit-form {
+  width: 100%;
+}
+
+mat-form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.info-label {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.info-value {
+  font-size: 1rem;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.quotes-section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.quotes-section h2 {
+  margin-bottom: 16px;
+  color: #3f51b5;
+  font-weight: 500;
+}
+
+.quotes-table {
+  width: 100%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mat-mdc-row:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.no-quotes-message {
+  margin: 16px 0;
+  color: #757575;
+  font-style: italic;
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.clickable-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 600px) {
+  .account-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .account-status {
+    margin-top: 16px;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .application-detail-container {
+    padding: 16px;
+  }
+  
+  .quotes-table {
+    overflow-x: auto;
+    display: block;
+  }
+} 

@@ -1,0 +1,335 @@
+{
+  "name": "Insurance Calculator Architecture",
+  "description": "Architecture diagram showing components governed by Agentic AI",
+  "components": [
+    {
+      "id": "frontend",
+      "name": "Frontend (Angular)",
+      "type": "system",
+      "isAgentic": false,
+      "children": [
+        {
+          "id": "browser",
+          "name": "Browser",
+          "type": "client",
+          "isAgentic": false
+        },
+        {
+          "id": "angular-app",
+          "name": "Angular App",
+          "type": "application",
+          "isAgentic": false,
+          "children": [
+            {
+              "id": "app-component",
+              "name": "App Component",
+              "type": "component",
+              "isAgentic": false
+            },
+            {
+              "id": "insurance-calculator-component",
+              "name": "Insurance Calculator Component",
+              "type": "component",
+              "isAgentic": false
+            },
+            {
+              "id": "insurance-service",
+              "name": "Insurance Service",
+              "type": "service",
+              "isAgentic": false
+            },
+            {
+              "id": "auth-service",
+              "name": "Auth Service",
+              "type": "service",
+              "isAgentic": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "name": "Backend (FastAPI)",
+      "type": "system",
+      "isAgentic": false,
+      "children": [
+        {
+          "id": "fastapi-app",
+          "name": "FastAPI App",
+          "type": "application",
+          "isAgentic": false
+        },
+        {
+          "id": "middleware",
+          "name": "Middleware",
+          "type": "middleware",
+          "isAgentic": false,
+          "children": [
+            {
+              "id": "cors-middleware",
+              "name": "CORS Middleware",
+              "type": "middleware",
+              "isAgentic": false
+            },
+            {
+              "id": "rate-limit-middleware",
+              "name": "Rate Limit Middleware",
+              "type": "middleware",
+              "isAgentic": false
+            },
+            {
+              "id": "cache-middleware",
+              "name": "Cache Middleware",
+              "type": "middleware",
+              "isAgentic": false
+            }
+          ]
+        },
+        {
+          "id": "endpoints",
+          "name": "API Endpoints",
+          "type": "endpoints",
+          "isAgentic": false,
+          "children": [
+            {
+              "id": "calculate-premium",
+              "name": "Calculate Premium",
+              "type": "endpoint",
+              "isAgentic": false
+            },
+            {
+              "id": "health-check",
+              "name": "Health Check",
+              "type": "endpoint",
+              "isAgentic": false
+            },
+            {
+              "id": "auth-endpoints",
+              "name": "Auth Endpoints",
+              "type": "endpoint",
+              "isAgentic": false
+            }
+          ]
+        },
+        {
+          "id": "services",
+          "name": "Services",
+          "type": "services",
+          "isAgentic": false,
+          "children": [
+            {
+              "id": "premium-calculator",
+              "name": "Premium Calculator",
+              "type": "service",
+              "isAgentic": true,
+              "description": "AI-powered premium calculation based on risk factors"
+            },
+            {
+              "id": "medical-risk-analysis",
+              "name": "Medical Risk Analysis",
+              "type": "service",
+              "isAgentic": true,
+              "description": "Uses LLM to analyze medical history and risk factors"
+            },
+            {
+              "id": "authentication",
+              "name": "Authentication",
+              "type": "service",
+              "isAgentic": false
+            }
+          ]
+        },
+        {
+          "id": "data-layer",
+          "name": "Data Layer",
+          "type": "data",
+          "isAgentic": false,
+          "children": [
+            {
+              "id": "database",
+              "name": "Database",
+              "type": "storage",
+              "isAgentic": false
+            },
+            {
+              "id": "vector-store",
+              "name": "Vector Store",
+              "type": "storage",
+              "isAgentic": true,
+              "description": "Stores and retrieves vector embeddings for semantic similarity search"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "agentic-ai-layer",
+      "name": "Agentic AI Layer",
+      "type": "system",
+      "isAgentic": true,
+      "children": [
+        {
+          "id": "crew-ai-orchestration",
+          "name": "CrewAI Orchestration",
+          "type": "service",
+          "isAgentic": true,
+          "description": "Coordinates multiple AI agents"
+        },
+        {
+          "id": "llm-inference",
+          "name": "LLM Inference (Ollama/Llama)",
+          "type": "service",
+          "isAgentic": true,
+          "description": "Provides the underlying language model capabilities"
+        },
+        {
+          "id": "ai-underwriting-logic",
+          "name": "AI Underwriting Logic",
+          "type": "service",
+          "isAgentic": true,
+          "description": "Applies AI to insurance underwriting decisions"
+        }
+      ]
+    },
+    {
+      "id": "configuration-utilities",
+      "name": "Configuration & Utilities",
+      "type": "system",
+      "isAgentic": false,
+      "children": [
+        {
+          "id": "config",
+          "name": "Config",
+          "type": "util",
+          "isAgentic": false
+        },
+        {
+          "id": "utils",
+          "name": "Utils",
+          "type": "util",
+          "isAgentic": false
+        },
+        {
+          "id": "environment-variables",
+          "name": "Environment Variables",
+          "type": "util",
+          "isAgentic": false
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "source": "browser",
+      "target": "angular-app"
+    },
+    {
+      "source": "angular-app",
+      "target": "app-component"
+    },
+    {
+      "source": "app-component",
+      "target": "insurance-calculator-component"
+    },
+    {
+      "source": "insurance-calculator-component",
+      "target": "insurance-service"
+    },
+    {
+      "source": "insurance-calculator-component",
+      "target": "auth-service"
+    },
+    {
+      "source": "insurance-service",
+      "target": "calculate-premium",
+      "type": "http"
+    },
+    {
+      "source": "auth-service",
+      "target": "auth-endpoints",
+      "type": "http"
+    },
+    {
+      "source": "fastapi-app",
+      "target": "cors-middleware"
+    },
+    {
+      "source": "fastapi-app",
+      "target": "rate-limit-middleware"
+    },
+    {
+      "source": "fastapi-app",
+      "target": "cache-middleware"
+    },
+    {
+      "source": "fastapi-app",
+      "target": "calculate-premium"
+    },
+    {
+      "source": "fastapi-app",
+      "target": "health-check"
+    },
+    {
+      "source": "fastapi-app",
+      "target": "auth-endpoints"
+    },
+    {
+      "source": "calculate-premium",
+      "target": "premium-calculator"
+    },
+    {
+      "source": "premium-calculator",
+      "target": "medical-risk-analysis"
+    },
+    {
+      "source": "auth-endpoints",
+      "target": "authentication"
+    },
+    {
+      "source": "premium-calculator",
+      "target": "database"
+    },
+    {
+      "source": "medical-risk-analysis",
+      "target": "vector-store"
+    },
+    {
+      "source": "premium-calculator",
+      "target": "crew-ai-orchestration"
+    },
+    {
+      "source": "medical-risk-analysis",
+      "target": "llm-inference"
+    },
+    {
+      "source": "crew-ai-orchestration",
+      "target": "ai-underwriting-logic"
+    },
+    {
+      "source": "fastapi-app",
+      "target": "config"
+    },
+    {
+      "source": "premium-calculator",
+      "target": "utils"
+    },
+    {
+      "source": "medical-risk-analysis",
+      "target": "utils"
+    },
+    {
+      "source": "fastapi-app",
+      "target": "environment-variables"
+    }
+  ],
+  "agenticComponents": [
+    "premium-calculator",
+    "medical-risk-analysis",
+    "vector-store",
+    "crew-ai-orchestration",
+    "llm-inference",
+    "ai-underwriting-logic",
+    "agentic-ai-layer"
+  ]
+} 

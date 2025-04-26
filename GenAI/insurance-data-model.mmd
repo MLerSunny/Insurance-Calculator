@@ -1,0 +1,354 @@
+classDiagram
+    direction LR
+    
+    %% Database Models
+    class InsuranceApplication {
+        +int id PK
+        +String applicant_name
+        +int applicant_age
+        +String email
+        +String phone
+        +JSON medical_history
+        +JSON risk_factors
+        +float coverage_amount
+        +float premium_amount
+        +boolean is_approved
+        +String ai_recommendation
+        +DateTime created_at
+        +DateTime updated_at
+        +int user_id FK
+        +save()
+        +update_status()
+        +calculate_risk_score()
+    }
+    
+    class User {
+        +int id PK
+        +String username
+        +String hashed_password
+        +String email
+        +boolean is_active
+        +String role
+        +DateTime created_at
+        +DateTime last_login
+        +validate_password()
+        +get_applications()
+        +update_profile()
+    }
+
+    class MedicalCondition {
+        +int id PK
+        +String name
+        +String description
+        +float base_risk_score
+        +String category
+        +DateTime created_at
+    }
+
+    class RiskScore {
+        +int id PK
+        +int application_id FK
+        +float overall_score
+        +float medical_factor
+        +float age_factor
+        +float lifestyle_factor
+        +String assessment_notes
+        +DateTime created_at
+        +recalculate()
+    }
+
+    %% Pydantic Models (Schemas)
+    class MedicalHistoryBase {
+        +List~String~ conditions
+        +List~String~ medications
+        +List~String~ surgeries
+        +List~String~ allergies
+        +validate_string_lists()
+        +to_json()
+    }
+
+    class RiskFactorsBase {
+        +boolean smoking
+        +boolean alcohol_consumption
+        +List~String~ dangerous_activities
+        +String occupation_risk
+        +validate_occupation_risk()
+        +validate_activities()
+        +to_json()
+        +calculate_risk_contribution()
+    }
+
+    class InsuranceApplicationBase {
+        +String applicant_name
+        +int applicant_age
+        +EmailStr email
+        +String phone
+        +MedicalHistoryBase medical_history
+        +RiskFactorsBase risk_factors
+        +float coverage_amount
+        +validate_phone()
+        +validate_name()
+        +to_orm_model()
+    }
+
+    class InsuranceApplicationCreate {
+        %% Inherits all from InsuranceApplicationBase
+        +Optional~int~ user_id
+    }
+
+    class InsuranceApplicationResponse {
+        +int id
+        +float premium_amount
+        +boolean is_approved
+        +String ai_recommendation
+        +DateTime created_at
+        +DateTime updated_at
+        +RiskScore risk_score
+        +from_orm()
+    }
+
+    class PremiumCalculationRequest {
+        +int applicant_age
+        +float coverage_amount
+        +MedicalHistoryBase medical_history
+        +RiskFactorsBase risk_factors
+        +Optional~String~ calculation_mode
+        +to_dict()
+    }
+
+    class PremiumCalculationResponse {
+        +float premium_amount
+        +String risk_assessment
+        +String ai_recommendation
+        +Dict factors
+        +to_json()
+        +to_application_response()
+    }
+    
+    class Token {
+        +String access_token
+        +String token_type
+        +Optional~int~ expires_in
+    }
+    
+    class TokenData {
+        +String username
+        +Optional~DateTime~ expires
+        +Optional~List~String~~ scopes
+        +is_expired()
+    }
+    
+    class UserCreate {
+        +String username
+        +String password
+        +String email
+        +Optional~String~ role
+        +validate_password_strength()
+    }
+    
+    class UserResponse {
+        +int id
+        +String username
+        +String email
+        +String role
+        +boolean is_active
+        +DateTime created_at
+        +from_orm()
+    }
+
+    %% AI Component Models
+    class VectorStore {
+        +String collection_name
+        +String persist_directory
+        +HuggingFaceEmbeddings embedding_model
+        +ChromaDB db
+        +add_documents()
+        +similarity_search()
+        +delete_collection()
+        +get_vector_store()
+        +update_embeddings()
+        +match_conditions()
+    }
+
+    class LLMService {
+        +OllamaLLM llm
+        +String MODEL_NAME
+        +generate_text()
+        +structured_generation()
+        +retry() exponential backoff
+        +get_llm_service()
+        +validate_response()
+        +parse_json_response()
+    }
+
+    class Agent {
+        +String name
+        +String role
+        +String goal
+        +LLMService llm_service
+        +VectorStore vector_store
+        +execute_task()
+        +_process_underwriter_task()
+        +_process_risk_analyst_task()
+        +_process_medical_expert_task()
+        +_fallback_responses()
+        +format_task_result()
+    }
+
+    class UnderwritingRuleEngine {
+        +List rules
+        +evaluate_application()
+        +apply_rules()
+        +calculate_risk_score()
+        +load_rules_from_config()
+        +add_custom_rule()
+    }
+    
+    class Crew {
+        +List~Agent~ agents
+        +List~Dict~ tasks
+        +run()
+        +_execute_agent_task()
+        +process_complex_application()
+        +create_default_crew()
+        +add_agent()
+    }
+    
+    class ResponseSchema {
+        +String name
+        +String description
+        +Optional~String~ type
+        +Optional~List~Dict~~ enum_values
+        +to_json_schema()
+    }
+    
+    %% Service/API Models
+    class FastAPI_App {
+        +configure_routes()
+        +include_routers()
+        +add_middleware()
+        +setup_cors()
+        +configure_logging()
+    }
+    
+    class AuthService {
+        +verify_password()
+        +get_password_hash()
+        +authenticate_user()
+        +create_access_token()
+        +get_current_user()
+        +verify_token()
+        +hash_algorithm
+    }
+    
+    class InsuranceCalculatorAPI {
+        +calculate_premium()
+        +submit_application()
+        +get_application()
+        +list_applications()
+        +update_application_status()
+        +delete_application()
+    }
+    
+    class CacheService {
+        +int ttl_seconds
+        +add_to_cache()
+        +get_from_cache()
+        +invalidate_cache()
+        +clear_all()
+    }
+    
+    class RateLimiter {
+        +int max_requests
+        +int time_window
+        +check_rate_limit()
+        +increment_counter()
+        +reset_counters()
+    }
+
+    %% Relationships - Group related ones together
+    InsuranceApplicationBase <|-- InsuranceApplicationCreate : extends
+    InsuranceApplicationBase <|-- InsuranceApplicationResponse : extends
+    
+    InsuranceApplicationBase *-- MedicalHistoryBase : contains
+    InsuranceApplicationBase *-- RiskFactorsBase : contains
+    
+    PremiumCalculationRequest *-- MedicalHistoryBase : contains
+    PremiumCalculationRequest *-- RiskFactorsBase : contains
+    
+    User "1" -- "0..*" InsuranceApplication : submits
+    InsuranceApplication "1" -- "1" RiskScore : has
+    
+    MedicalCondition "0..*" -- "0..*" MedicalHistoryBase : references
+    
+    Agent ..> LLMService : uses
+    Agent ..> VectorStore : uses
+    
+    Crew *-- Agent : orchestrates
+    LLMService ..> ResponseSchema : uses
+    
+    VectorStore ..> MedicalCondition : indexes
+    
+    PremiumCalculationResponse <.. Agent : generates
+    UnderwritingRuleEngine <.. Agent : uses
+    
+    InsuranceApplication <.. InsuranceApplicationResponse : maps to
+    User <.. UserResponse : maps to
+    
+    AuthService ..> User : authenticates
+    AuthService --> Token : generates
+    TokenData <-- AuthService : extracts from
+    UserCreate --> User : creates
+    
+    FastAPI_App *-- AuthService : uses
+    FastAPI_App *-- InsuranceCalculatorAPI : registers
+    FastAPI_App *-- CacheService : uses
+    FastAPI_App *-- RateLimiter : uses
+    
+    InsuranceCalculatorAPI ..> InsuranceApplication : manages
+    InsuranceCalculatorAPI ..> PremiumCalculationRequest : processes
+    InsuranceCalculatorAPI ..> Crew : delegates to
+    InsuranceCalculatorAPI ..> CacheService : utilizes
+    
+    %% Styling
+    classDef databaseModels fill:#3498db,stroke:#333,stroke-width:3px,color:white
+    classDef schemaModels fill:#2ecc71,stroke:#333,stroke-width:3px,color:white
+    classDef aiComponents fill:#ff8c00,stroke:#333,stroke-width:3px,color:white
+    classDef utilities fill:#9b59b6,stroke:#333,stroke-width:3px,color:white
+    classDef apiComponents fill:#e74c3c,stroke:#333,stroke-width:3px,color:white
+    classDef authComponents fill:#f39c12,stroke:#333,stroke-width:3px,color:white
+    classDef middlewareComponents fill:#1abc9c,stroke:#333,stroke-width:3px,color:white
+    
+    %% Apply styles
+    class InsuranceApplication databaseModels
+    class User databaseModels
+    class MedicalCondition databaseModels
+    class RiskScore databaseModels
+    
+    class MedicalHistoryBase schemaModels
+    class RiskFactorsBase schemaModels
+    class InsuranceApplicationBase schemaModels
+    class InsuranceApplicationCreate schemaModels
+    class InsuranceApplicationResponse schemaModels
+    class PremiumCalculationRequest schemaModels
+    class PremiumCalculationResponse schemaModels
+    class UserCreate schemaModels
+    class UserResponse schemaModels
+    
+    class VectorStore aiComponents
+    class LLMService aiComponents
+    class Agent aiComponents
+    class UnderwritingRuleEngine aiComponents
+    class Crew aiComponents
+    
+    class ResponseSchema utilities
+    
+    class FastAPI_App apiComponents
+    class InsuranceCalculatorAPI apiComponents
+    
+    class AuthService authComponents
+    class Token authComponents
+    class TokenData authComponents
+    
+    class CacheService middlewareComponents
+    class RateLimiter middlewareComponents

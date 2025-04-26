@@ -1,0 +1,500 @@
+<div class="quote-container">
+  <div class="header">
+    <button mat-icon-button (click)="cancel()" matTooltip="Back to application">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Insurance Quote Application</h1>
+  </div>
+  
+  <div *ngIf="loading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Loading application data...</span>
+  </div>
+  
+  <div *ngIf="!loading">
+    <form [formGroup]="quoteForm" (ngSubmit)="submitForm()">
+      <!-- Applicant Information -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Applicant Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" readonly>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" readonly>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Application Number</mat-label>
+              <input matInput formControlName="applicationNumber" readonly>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Health Assessment -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Health Assessment</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>General Health</mat-label>
+              <mat-select formControlName="generalHealth">
+                <mat-option *ngFor="let option of healthOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('generalHealth')?.hasError('required') && quoteForm.get('generalHealth')?.touched">
+                General health is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Height (cm)</mat-label>
+              <input matInput formControlName="height" placeholder="e.g., 175">
+              <mat-error *ngIf="quoteForm.get('height')?.hasError('required') && quoteForm.get('height')?.touched">
+                Height is required
+              </mat-error>
+              <mat-error *ngIf="quoteForm.get('height')?.hasError('pattern') && quoteForm.get('height')?.touched">
+                Enter a valid height in centimeters
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Weight (kg)</mat-label>
+              <input matInput formControlName="weight" placeholder="e.g., 70">
+              <mat-error *ngIf="quoteForm.get('weight')?.hasError('required') && quoteForm.get('weight')?.touched">
+                Weight is required
+              </mat-error>
+              <mat-error *ngIf="quoteForm.get('weight')?.hasError('pattern') && quoteForm.get('weight')?.touched">
+                Enter a valid weight in kilograms
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Pre-existing Conditions -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Pre-existing Medical Conditions</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Do you have any pre-existing conditions?</mat-label>
+              <mat-select formControlName="preExistingConditions" (selectionChange)="updateConditionalFields()">
+                <mat-option *ngFor="let condition of medicalConditions" [value]="condition">
+                  {{condition}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('preExistingConditions')?.hasError('required') && quoteForm.get('preExistingConditions')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div *ngIf="quoteForm.get('preExistingConditions')?.value && quoteForm.get('preExistingConditions')?.value !== 'None'" class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Date of Diagnosis</mat-label>
+              <input matInput formControlName="diagnosisDate" placeholder="MM/YYYY">
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Current Treatment</mat-label>
+              <textarea matInput formControlName="currentTreatment" rows="2"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Medical History -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Medical History</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Hospitalized in the last 5 years?</mat-label>
+              <mat-select formControlName="hospitalizedLast5Years" (selectionChange)="updateConditionalFields()">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('hospitalizedLast5Years')?.hasError('required') && quoteForm.get('hospitalizedLast5Years')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Surgery in the last 10 years?</mat-label>
+              <mat-select formControlName="surgeryLast10Years" (selectionChange)="updateConditionalFields()">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('surgeryLast10Years')?.hasError('required') && quoteForm.get('surgeryLast10Years')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div *ngIf="quoteForm.get('hospitalizedLast5Years')?.value === 'Yes'" class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Hospitalization Details</mat-label>
+              <textarea matInput formControlName="hospitalizationDetails" rows="2"></textarea>
+            </mat-form-field>
+          </div>
+          
+          <div *ngIf="quoteForm.get('surgeryLast10Years')?.value === 'Yes'" class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Surgery Details</mat-label>
+              <textarea matInput formControlName="surgeryDetails" rows="2"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Family Medical History -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Family Medical History</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Family History of Heart Disease?</mat-label>
+              <mat-select formControlName="familyHeartDisease">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('familyHeartDisease')?.hasError('required') && quoteForm.get('familyHeartDisease')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Family History of Cancer?</mat-label>
+              <mat-select formControlName="familyCancer">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('familyCancer')?.hasError('required') && quoteForm.get('familyCancer')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Family History of Diabetes?</mat-label>
+              <mat-select formControlName="familyDiabetes">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('familyDiabetes')?.hasError('required') && quoteForm.get('familyDiabetes')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Other Family Medical Conditions</mat-label>
+              <textarea matInput formControlName="otherFamilyConditions" rows="2"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Travel History -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Travel History (Last 5 Years)</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Traveled Outside Country in Last 5 Years?</mat-label>
+              <mat-select formControlName="travelOutsideCountry" (selectionChange)="updateConditionalFields()">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('travelOutsideCountry')?.hasError('required') && quoteForm.get('travelOutsideCountry')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div *ngIf="quoteForm.get('travelOutsideCountry')?.value === 'Yes'" class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Regions Visited</mat-label>
+              <mat-select formControlName="travelRegions" multiple>
+                <mat-option *ngFor="let region of travelRegions" [value]="region">
+                  {{region}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Travel Purpose</mat-label>
+              <input matInput formControlName="travelPurpose">
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Lifestyle -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Lifestyle Habits</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Do you smoke?</mat-label>
+              <mat-select formControlName="smokingStatus" (selectionChange)="updateConditionalFields()">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('smokingStatus')?.hasError('required') && quoteForm.get('smokingStatus')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" *ngIf="quoteForm.get('smokingStatus')?.value === 'Yes'">
+              <mat-label>Smoking Frequency</mat-label>
+              <mat-select formControlName="smokingFrequency">
+                <mat-option *ngFor="let option of frequencyOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" *ngIf="quoteForm.get('smokingStatus')?.value === 'Yes'">
+              <mat-label>Years Smoking</mat-label>
+              <input matInput formControlName="smokingYears" type="number">
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Do you consume alcohol?</mat-label>
+              <mat-select formControlName="alcoholConsumption" (selectionChange)="updateConditionalFields()">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('alcoholConsumption')?.hasError('required') && quoteForm.get('alcoholConsumption')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" *ngIf="quoteForm.get('alcoholConsumption')?.value === 'Yes'">
+              <mat-label>Alcohol Consumption Frequency</mat-label>
+              <mat-select formControlName="alcoholFrequency">
+                <mat-option *ngFor="let option of frequencyOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Do you use recreational drugs?</mat-label>
+              <mat-select formControlName="drugUse">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('drugUse')?.hasError('required') && quoteForm.get('drugUse')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Exercise Frequency</mat-label>
+              <mat-select formControlName="exerciseFrequency">
+                <mat-option *ngFor="let option of frequencyOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('exerciseFrequency')?.hasError('required') && quoteForm.get('exerciseFrequency')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Occupation -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Occupation</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Current Occupation</mat-label>
+              <input matInput formControlName="occupation">
+              <mat-error *ngIf="quoteForm.get('occupation')?.hasError('required') && quoteForm.get('occupation')?.touched">
+                Occupation is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Occupation Risk Level</mat-label>
+              <mat-select formControlName="occupationRiskLevel">
+                <mat-option *ngFor="let level of occupationRiskLevels" [value]="level">
+                  {{level}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('occupationRiskLevel')?.hasError('required') && quoteForm.get('occupationRiskLevel')?.touched">
+                Risk level is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Work Hours Per Week</mat-label>
+              <input matInput formControlName="workHoursPerWeek" type="number">
+              <mat-error *ngIf="quoteForm.get('workHoursPerWeek')?.hasError('required') && quoteForm.get('workHoursPerWeek')?.touched">
+                Work hours is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Mental Health -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Mental Health</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Stress Level (1-10)</mat-label>
+              <mat-select formControlName="stressLevel">
+                <mat-option *ngFor="let level of stressLevels" [value]="level">
+                  {{level}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('stressLevel')?.hasError('required') && quoteForm.get('stressLevel')?.touched">
+                Stress level is required
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Diagnosed with Mental Health Condition?</mat-label>
+              <mat-select formControlName="mentalHealthDiagnosis" (selectionChange)="updateConditionalFields()">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('mentalHealthDiagnosis')?.hasError('required') && quoteForm.get('mentalHealthDiagnosis')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div *ngIf="quoteForm.get('mentalHealthDiagnosis')?.value === 'Yes'" class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Mental Health Details</mat-label>
+              <textarea matInput formControlName="mentalHealthDetails" rows="2"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Medications -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Current Medications</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Currently Taking Medications?</mat-label>
+              <mat-select formControlName="currentMedications" (selectionChange)="updateConditionalFields()">
+                <mat-option *ngFor="let option of yesNoOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('currentMedications')?.hasError('required') && quoteForm.get('currentMedications')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div *ngIf="quoteForm.get('currentMedications')?.value === 'Yes'" class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Medication Details</mat-label>
+              <textarea matInput formControlName="medicationDetails" rows="2"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Dependents -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Dependents</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Number of Dependents</mat-label>
+              <mat-select formControlName="numberOfDependents">
+                <mat-option *ngFor="let option of dependentOptions" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="quoteForm.get('numberOfDependents')?.hasError('required') && quoteForm.get('numberOfDependents')?.touched">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Additional Information -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>Additional Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Any other information you'd like to provide?</mat-label>
+              <textarea matInput formControlName="additionalInformation" rows="4"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button mat-raised-button type="button" color="basic" (click)="cancel()">Cancel</button>
+        <button mat-raised-button type="submit" color="primary" [disabled]="submitting">
+          <mat-spinner *ngIf="submitting" diameter="20" class="spinner-inside-button"></mat-spinner>
+          <span *ngIf="!submitting">Submit Quote Application</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div> 

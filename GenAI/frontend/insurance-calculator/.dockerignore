@@ -1,0 +1,24 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Angular
+/dist/
+/.angular/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+/coverage/
+/e2e/*.js
+/e2e/*.map
+
+# Misc
+.DS_Store
+Thumbs.db 

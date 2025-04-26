@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insurance Application Architecture</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: white;
+        }
+        #diagram {
+            width: 100%;
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="diagram">
+        <pre class="mermaid">
+graph TD
+    %% Client-Side Components
+    Browser["Browser"]
+    subgraph AngularApp["Angular App"]
+        AngRouter["Angular Router"]
+        QuoteComp["Quote Component"]
+        AppDetailComp["Application Detail Component"]
+        SearchComp["Search Component"]
+        OverviewDialog["Quote Overview Dialog"]
+        
+        %% Angular Services
+        InsuranceService["Insurance Service"]
+        QuoteService["Quote Service"]
+        AIInsightService["AI Insight Service"]
+    end
+    
+    %% Server-Side Components
+    subgraph FastAPIApp["FastAPI App"]
+        FastAPIRouter["FastAPI Router"]
+        
+        subgraph APIEndpoints["API Endpoints"]
+            AppAPI["Application API"]
+            QuoteAPI["Quote API"]
+            SearchAPI["Search API"]
+            AIAnalysisAPI["AI Analysis API"]
+        end
+        
+        subgraph Services["Services"]
+            PremiumCalc["Premium Calculator"]
+            MedicalRisk["Medical Risk Analysis"]
+            AppService["Application Service"]
+            QuoteProcessor["Quote Processor"]
+            VectorStore["Vector Store"]
+        end
+
+        subgraph DataLayer["Data Layer"]
+            AppRepo["Application Repository"]
+            QuoteRepo["Quote Repository"]
+            DB[(SQLite Database)]
+        end
+    end
+    
+    %% AI Components
+    subgraph AILayer["AI Processing Layer"]
+        LLMService["LLM Inference Service"]
+        VectorDB[(Vector Database)]
+        CrewAI["CrewAI Orchestration"]
+        Langchain["Langchain Pipelines"]
+        
+        subgraph AgentSystem["Agent System"]
+            MedicalAgent["Medical Specialist Agent"]
+            ActuaryAgent["Actuarial Agent"]
+            FraudAgent["Fraud Detection Agent"]
+            UnderwriterAgent["Underwriting Agent"]
+        end
+    end
+    
+    %% External Services
+    subgraph ExternalServices["External Services"]
+        OpenAIAPI["OpenAI API"]
+        CloudStorage["Cloud Storage"]
+    end
+    
+    %% Data Flow Lines
+    Browser <--> AngRouter
+    AngRouter --> QuoteComp
+    AngRouter --> AppDetailComp
+    AngRouter --> SearchComp
+    AppDetailComp --> OverviewDialog
+    
+    QuoteComp --> InsuranceService
+    AppDetailComp --> InsuranceService
+    AppDetailComp --> QuoteService
+    SearchComp --> InsuranceService
+    OverviewDialog --> AIInsightService
+    
+    InsuranceService --> FastAPIRouter
+    QuoteService --> FastAPIRouter
+    AIInsightService --> FastAPIRouter
+    
+    FastAPIRouter --> AppAPI
+    FastAPIRouter --> QuoteAPI
+    FastAPIRouter --> SearchAPI
+    FastAPIRouter --> AIAnalysisAPI
+    
+    AppAPI --> AppService
+    QuoteAPI --> QuoteProcessor
+    SearchAPI --> AppService
+    AIAnalysisAPI --> MedicalRisk
+    AIAnalysisAPI --> PremiumCalc
+    AIAnalysisAPI --> VectorStore
+    
+    AppService --> AppRepo
+    QuoteProcessor --> QuoteRepo
+    AppRepo --> DB
+    QuoteRepo --> DB
+    VectorStore --> VectorDB
+    
+    %% AI Flow
+    AIAnalysisAPI --> LLMService
+    AIAnalysisAPI --> CrewAI
+    LLMService --> OpenAIAPI
+    VectorStore --> VectorDB
+    
+    MedicalRisk --> LLMService
+    MedicalRisk --> VectorDB
+    
+    CrewAI --> MedicalAgent
+    CrewAI --> ActuaryAgent
+    CrewAI --> FraudAgent
+    CrewAI --> UnderwriterAgent
+    
+    MedicalAgent --> LLMService
+    ActuaryAgent --> LLMService
+    FraudAgent --> LLMService
+    UnderwriterAgent --> LLMService
+    
+    Langchain --> LLMService
+    Langchain --> VectorDB
+    
+    %% Styling
+    classDef angular fill:#DD0031,color:white,stroke:#DD0031
+    classDef fastapi fill:#009688,color:white,stroke:#009688
+    classDef database fill:#3498DB,color:white,stroke:#3498DB
+    classDef ai fill:#ff8c00,color:white,stroke:#ff8c00
+    classDef external fill:#9370DB,color:white,stroke:#9370DB
+    
+    class AngularApp,AngRouter,QuoteComp,AppDetailComp,SearchComp,InsuranceService,QuoteService,AIInsightService,OverviewDialog angular
+    class FastAPIApp,FastAPIRouter,AppAPI,QuoteAPI,SearchAPI,AIAnalysisAPI,PremiumCalc,AppService,QuoteProcessor,AppRepo,QuoteRepo fastapi
+    class DB,VectorDB database
+    class AILayer,LLMService,VectorStore,CrewAI,MedicalAgent,ActuaryAgent,FraudAgent,UnderwriterAgent,Langchain,MedicalRisk ai
+    class ExternalServices,OpenAIAPI,CloudStorage external
+        </pre>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            themeVariables: {
+                fontSize: '16px'
+            }
+        });
+        
+        // Add functionality to save as PNG
+        window.onload = function() {
+            setTimeout(function() {
+                console.log("Mermaid diagram loaded and ready");
+            }, 1000);
+        };
+    </script>
+</body>
+</html> 

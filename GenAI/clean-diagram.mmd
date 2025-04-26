@@ -1,0 +1,74 @@
+graph TB
+    %% Client Side
+    A[Browser] --> B[Angular App]
+    B --> C1[App Component]
+    C1 --> C2[Insurance Calculator]
+    C1 --> C3[Insurance Search]
+    
+    %% Angular Services
+    C2 --> D1[Insurance Service]
+    C3 --> D1
+    C2 --> D2[Auth Service]
+    
+    %% Server Side
+    E[FastAPI App] --> F1[CORS Middleware]
+    E --> F2[Rate Limit Middleware]
+    E --> F3[Cache Middleware]
+    
+    %% API Endpoints
+    E --> G1[Calculate Premium]
+    E --> G2[Health Check]
+    E --> G3[Auth Endpoints]
+    E --> G4[Insurance Applications]
+    
+    %% Services
+    G1 --> H1[Premium Calculator<br>DeepSeek-R1]
+    H1 --> H2[Medical Risk Analysis<br>Vector Search]
+    G3 --> H3[Authentication<br>JWT Token]
+    G4 --> H4[Application Processing<br>JSON]
+    
+    %% Data Layer
+    H1 --> I1[Database<br>SQLite/PostgreSQL]
+    H2 --> I2[Vector Store<br>ChromaDB]
+    H4 --> I1
+    
+    %% AI Orchestration
+    H1 --> K1[CrewAI Orchestration<br>Multi-Agent System]
+    H2 --> K2[LLM Service<br>langchain_ollama]
+    K1 --> K3[AI Underwriting Logic<br>Rule Engine + LLM]
+    K1 --> K4[Specialized AI Agents<br>Agent Class]
+    
+    %% LLM Integration
+    K2 --> L1[OllamaLLM<br>Client]
+    L1 --> L2[DeepSeek-R1<br>32B Parameters]
+    K2 --> L3[Structured Generation<br>JSON Output]
+    
+    %% AI Agent Details
+    K4 --> M1[Risk Analyzer Agent<br>Risk Assessment]
+    K4 --> M2[Medical Expert Agent<br>Medical Evaluation]
+    K4 --> M3[Underwriter Agent<br>Decision Making]
+    
+    %% Communication
+    D1 -->|HTTP Requests| G1
+    D1 -->|HTTP Requests| G4
+    D2 -->|HTTP Requests| G3
+    
+    %% Config Utilities
+    E --> J1[Config<br>Environment Variables]
+    H1 --> J2[Utils<br>Helper Functions]
+    H2 --> J2
+    
+    %% Node styling for Agentic AI components
+    style H1 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style H2 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style I2 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style K1 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style K2 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style K3 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style K4 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style L1 fill:#f0f0f0,stroke:#333,stroke-width:1px
+    style L2 fill:#f0f0f0,stroke:#333,stroke-width:1px
+    style L3 fill:#f0f0f0,stroke:#333,stroke-width:1px
+    style M1 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style M2 fill:#ff8c00,stroke:#333,stroke-width:2px
+    style M3 fill:#ff8c00,stroke:#333,stroke-width:2px 

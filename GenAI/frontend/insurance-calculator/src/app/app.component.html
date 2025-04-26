@@ -1,0 +1,18 @@
+<div class="app-container">
+  <header class="navigation-header" role="banner">
+    <h1>Insurance Premium Calculator</h1>
+    
+    <nav class="navigation-tabs" aria-label="Main Navigation">
+      <a routerLink="/search" routerLinkActive="active-link" class="nav-link" aria-current="page">Search Applications</a>
+      <a *ngIf="showCalculator" routerLink="/calculator" routerLinkActive="active-link" class="nav-link">Calculator</a>
+    </nav>
+  </header>
+  
+  <main class="content-container" role="main">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer role="contentinfo" class="app-footer">
+    <p>&copy; {{currentYear}} Insurance Premium Calculator</p>
+  </footer>
+</div>
