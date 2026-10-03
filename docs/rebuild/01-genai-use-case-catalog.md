@@ -255,17 +255,14 @@ hundreds of pages of medical evidence), and its pieces (B2, C1, C3, C4) are
 also the building blocks for Options 2 and 3. Claims (Option 2) is the natural
 second vertical on the same core.
 
-## 6. Decisions needed before design
+## 6. Decisions (recorded 2026-10-03)
 
-1. **First vertical:** Option 1, 2 or 3 (or a different focus).
-2. **Primary goal:** portfolio / demo, internal prototype, or a path to
-   production with a real carrier.
-3. **Model hosting:** local open models (Ollama) only, a hosted API, or
-   both behind one interface.
-4. **Data:** synthetic and public data only, or access to real
-   (de-identified) documents.
-5. **Teardown scope:** archive the current `GenAI/` app in place, delete it,
-   or reuse selected pieces (rules engine, questionnaire, guideline corpus).
+| # | Decision | Choice | Notes |
+|---|----------|--------|-------|
+| 1 | First vertical | **Option 2: P&C Claims Copilot** | Life underwriting and commercial submissions stay on the roadmap on the same core |
+| 2 | Primary goal | **Path to production** | Security, audit, evaluation and model governance are designed in from the first release |
+| 3 | Model hosting | **Local and hosted models behind one interface** | Provider chosen by configuration and by data-sensitivity policy |
+| 4 | Data | Synthetic and public data for the build (implied by 1–3; real data only through a carrier engagement) | |
+| 5 | Teardown | **Archive the current `GenAI/` app, reuse pieces** | With claims as the focus, little code carries over directly: the rule-engine pattern (K3), Pydantic validation style and Docker Compose layout are reused; life-specific pieces (questionnaire, guideline corpus) stay archived for the later life vertical |
 
-The next document (`02-…`) will turn the chosen scope into personas,
-end-to-end user journeys, functional requirements and an MVP cut.
+Next: [02: Claims Copilot scope, personas, journeys and requirements](02-claims-copilot-scope.md).
