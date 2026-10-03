@@ -26,6 +26,7 @@ disagree, these docs describe what the code does today, and
 | 08 | [Function call graphs](08-function-call-graphs.md) | Who-calls-whom for every backend module and frontend component |
 | 09 | [Gap analysis](09-gap-analysis.md) | Bugs, dead code, documentation drift, missing features, prioritized fix list |
 | 10 | [Setup, configuration and testing](10-setup-and-operations.md) | Running locally, Docker Compose, environment variables, test suite, seeding the vector DB |
+| 11 | [Architecture audit](11-architecture-audit.md) | Is this the right architecture? Scorecard, findings per dimension, what to keep, target architecture, migration path |
 
 ## The system in one picture
 
