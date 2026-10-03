@@ -115,7 +115,7 @@ sequenceDiagram
         Pat->>Chat: answers + 4 photos
     end
     Core->>AI: photo descriptions (flooring, lower cabinets, drywall)
-    Core->>AI: triage (urgent: active leak was stopped; mitigation needed)
+    Core->>AI: triage (urgent: leak stopped, mitigation needed)
     AI-->>Core: severity medium, urgency high, reasons
     Core-->>Pat: claim CLM-24-00123, mitigation advice, what happens next (no coverage promise)
     Core-->>Alex: new file in queue with structured FNOL, photos, triage reasons
