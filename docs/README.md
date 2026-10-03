@@ -28,6 +28,14 @@ disagree, these docs describe what the code does today, and
 | 10 | [Setup, configuration and testing](10-setup-and-operations.md) | Running locally, Docker Compose, environment variables, test suite, seeding the vector DB |
 | 11 | [Architecture audit](11-architecture-audit.md) | Is this the right architecture? Scorecard, findings per dimension, what to keep, target architecture, migration path |
 
+## GenAI rebuild
+
+The current app is being replaced by a real GenAI insurance application. Planning documents live in [`rebuild/`](rebuild/):
+
+| # | Document | What it covers |
+|---|----------|----------------|
+| R01 | [GenAI use-case catalog](rebuild/01-genai-use-case-catalog.md) | GenAI fit test, 60 use cases across the insurance value chain, scoring, shortlist, candidate product scopes, decisions needed |
+
 ## The system in one picture
 
 ```mermaid
