@@ -36,6 +36,7 @@ The current app is being replaced by a real GenAI insurance application. Plannin
 |---|----------|----------------|
 | R01 | [GenAI use-case catalog](rebuild/01-genai-use-case-catalog.md) | GenAI fit test, 60 use cases across the insurance value chain, scoring, shortlist, candidate product scopes, recorded decisions |
 | R02 | [Claims Copilot scope](rebuild/02-claims-copilot-scope.md) | Product statement, line of business, lifecycle capability map, personas, journeys, functional and non-functional requirements, release plan, data strategy |
+| R03 | [Target architecture](rebuild/03-target-architecture.md) | Principles, C4 context/containers/modules, data model and claim workflow, model gateway, guardrails, agent graphs, API, security, evaluation, deployment, ADRs |
 
 ## The system in one picture
 

@@ -266,16 +266,15 @@ flowchart LR
 - Real policyholder data until a carrier engagement provides it under a data
   agreement.
 
-## 11. Open questions
+## 11. Decisions and open questions
 
-1. Confirm **homeowners property** as the first line (vs personal auto).
-2. Policy administration and claims systems: build a minimal internal policy
-   and claims store for now (recommended), or design against a specific core
-   platform's APIs from the start?
-3. Hosted model provider preference and any data-residency constraints.
-4. Target deployment environment (a specific cloud, Kubernetes, or a single VM
-   for the pilot).
+| # | Question | Status |
+|---|----------|--------|
+| 1 | First line of business | **Decided 2026-10-04: homeowners property** (personal auto second) |
+| 2 | Policy and claims systems | **Decided 2026-10-04: build our own store**: a minimal policy store seeded with synthetic policies, and the claims store as system of record |
+| 3 | Hosted model provider and data-residency constraints | Open: the architecture stays provider-agnostic |
+| 4 | Target deployment environment | Open: the architecture is container-first and cloud-agnostic |
 
-Next: **03 — Target architecture** (components, model gateway, document
+Next: [03: Target architecture](03-target-architecture.md) (components, model gateway, document
 pipeline, agent graphs, data model, security, evaluation), then **04 — Repo
 restructure and teardown plan**.
