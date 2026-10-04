@@ -2,6 +2,10 @@
 
 An AI-powered insurance premium calculator application with FastAPI backend and Angular frontend.
 
+## Documentation
+
+Full as-built documentation with architecture, flow, sequence, call-graph and data-model diagrams, use cases, user scenarios and a gap analysis lives in [`docs/`](docs/README.md). The older documents under `GenAI/` describe the original intended design and differ from the code in several places (see [`docs/09-gap-analysis.md`](docs/09-gap-analysis.md#8-documentation-drift-old-docs-vs-code)).
+
 ## Project Structure
 
 - **backend/** - FastAPI backend application
